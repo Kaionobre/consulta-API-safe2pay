@@ -1,12 +1,15 @@
+import os
+from dotenv import load_dotenv
 import requests
-import Login
+import configuracoes
 import pandas as pd
 from datetime import datetime 
 
-login = Login.Login()
-token = login.get_token()
+load_dotenv()
+login = configuracoes.Login()
+token = os.getenv("TOKEN_SAFE2PAY")
 
-lerPlanilha = pd.read_excel(login.get_caminhoPlanilha(), login.get_paginaPlanilha(), dtype={'Documento': str, 'Protocolo': str})
+lerPlanilha = pd.read_excel(login.get_caminho_planilha(), login.get_pagina_planilha(), dtype={'Documento': str, 'Protocolo': str})
 
 lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 
@@ -14,11 +17,10 @@ lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
 lerPlanilha["VALOR PAGO"] = ""  
 lerPlanilha["DATA PAGAMENTO"] = ""
 lerPlanilha["STATUS"] = ""
+lerPlanilha["RESULTADO"] = ""
 
-lerPlanilha['Protocolo'] = lerPlanilha['Protocolo'].astype(str)
-
-for x in range(int(login.maxIndicePlanilha())):
-    protocolo = lerPlanilha["Protocolo"][x]
+for linha in lerPlanilha.itertuples():
+    protocolo = linha.Protocolo
 
     url = f"https://api.safe2pay.com.br/v2/transaction/Reference?reference={protocolo}"
 
@@ -52,26 +54,28 @@ for x in range(int(login.maxIndicePlanilha())):
             if status == 'Pendente':
                 print("Boleto Pendente 🔘")
                 pendente = login.adicionaPendente()
-                lerPlanilha.at[x, 'VALOR PAGO'] = str(00.00)
+                lerPlanilha[linha.Index, 'VALOR PAGO'] = str(00.00)
             elif status == 'Baixado':
                 print("Boleto Baixado 🔴")
                 baixado = login.adicionaBaixado()
-                lerPlanilha.at[x, 'VALOR PAGO'] = str(00.00)
+                lerPlanilha.at[linha.Index, 'VALOR PAGO'] = str(00.00)
             elif status == 'Liberado':
                 print("Boleto Liberado 🔵")
                 liberado = login.adicionaLiberado()
-                lerPlanilha.at[x, 'VALOR PAGO'] = str(valor_boleto)
+                lerPlanilha.at[linha.Index, 'VALOR PAGO'] = str(valor_boleto)
             else:
                 print("Boleto pago com sucesso 🟢")
                 pago = login.adicionaPago()
-                lerPlanilha.at[x, 'VALOR PAGO'] = str(f'{valor_boleto:.2f}')
+                lerPlanilha.at[linha.Index, 'VALOR PAGO'] = str(f'{valor_boleto:.2f}')
 
-            lerPlanilha.at[x, 'DATA PAGAMENTO'] = data_padrao
-            lerPlanilha.at[x, 'STATUS'] = status
+            lerPlanilha.at[linha.Index, 'DATA PAGAMENTO'] = data_padrao
+            lerPlanilha.at[linha.Index, 'STATUS'] = status
     else:
         print(f"Falha ao consultar Boleto para o protocolo {protocolo}. Detalhes:", response.text)
 
-lerPlanilha.to_excel(login.get_caminhoPlanilha(), index=False)
-dados = login.mostrarDados()
+nome_arquivo = f"Planilha Finalizada {datetime.now().strftime('%d-%m-%Y__%H-%M-%S')}.xlsx"
+
+lerPlanilha.to_excel(nome_arquivo, index=False)
+print(login.mostrarDados())
 
 
