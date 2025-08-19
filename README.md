@@ -1,33 +1,54 @@
-﻿# Projeto de RPA - Consulta e Liberação de Boletos via API
+﻿# 🤖 RPA - Consulta de Pagamentos Safe2Pay
 
-Este projeto foi desenvolvido para automatizar o processo de consulta e liberação de boletos através de uma integração com a API da Safe2Pay. Utilizando bibliotecas como **Requests** e **Pandas**, foi possível economizar horas de trabalho, processando em média 80 requisições a cada 5 minutos.
+Este projeto é um **RPA orientado a API** que automatiza a consulta de pagamentos de clientes da Certsempre.  
+Com base em uma planilha de protocolos, o sistema consulta a **API Safe2Pay**, extrai informações financeiras e gera uma nova planilha já preenchida, reduzindo drasticamente o tempo gasto em comparação ao processo manual.
 
-Algumas informações sensíveis, como credenciais de login e a chave da API, foram removidas ou alteradas para garantir a segurança dos dados da empresa **Certsempre** e de seus clientes.
+---
 
-## Tecnologias Utilizadas
+## 📌 Problema
+Antes da automação, o processo era **manual**:  
+1. Acessar o sistema da Safe2Pay  
+2. Copiar o protocolo da planilha  
+3. Pesquisar o protocolo no sistema  
+4. Copiar **valor**, **status** e **data de pagamento**  
+5. Colar na planilha  
+6. Repetir para cada cliente  
 
-- **Pandas**: Para leitura e manipulação dos dados da planilha.
-- **Requests**: Para realizar as consultas via API.
-- **Orientação a Objetos (OO)**: Utilizada para encapsular dados sensíveis, como senhas e tokens, garantindo a segurança das informações.
+⏳ Esse fluxo levava **2 minuto por linha**, resultando em **horas de trabalho para planilhas grandes**.
 
-## Funcionalidades
+---
 
-1. **Leitura da Planilha**: O sistema lê uma planilha Excel contendo informações de clientes e boletos a serem consultados.
-2. **Consulta de Boletos**: Para cada protocolo listado na planilha, o sistema faz uma requisição à API Safe2Pay para verificar o status do boleto.
-3. **Atualização da Planilha**: A planilha é atualizada com informações de pagamento, data de pagamento e o status atual do boleto.
-4. **Liberação de Boletos**: O sistema também permite a liberação de boletos diretamente via API, conforme necessário.
-5. **Logs e Relatórios**: Após a execução, o sistema gera logs com o número de boletos pagos, liberados, baixados e pendentes.
+## 🚀 Solução
+Com a automação:  
+- Para cada protocolo da planilha, o sistema consulta a **API Safe2Pay** (via `requests`).  
+- Do **JSON de resposta**, o robô extrai automaticamente:  
+  - Valor do boleto  
+  - Status do boleto  
+  - Data do pagamento  
+- Esses dados são preenchidos diretamente em uma nova planilha Excel, organizada com as colunas:  
 
-## Segurança
+| VALOR PAGO | STATUS   | DATA PAGAMENTO |
+|------------|----------|----------------|
 
-Neste projeto, foram tomadas medidas de segurança para proteger informações sensíveis:
+---
 
-- **Credenciais e Chaves de API**: As senhas, tokens e chaves de API foram movidas para variáveis privadas e não estão expostas no código principal.
-- **Omissão de Dados**: Informações sensíveis relacionadas a clientes e à empresa **Certsempre** foram removidas para garantir a privacidade e a segurança dos dados.
+## 📈 Benefícios
+- **Automação total** do processo manual  
+- **Redução de tempo de horas para segundos**  
+- **Cada consulta leva menos de 1 segundo** (contra 2 minutos manuais)  
+- **Eficiência > 6000%** em planilhas médias e grandes  
+- **Precisão nos dados**, sem risco de erro humano  
 
-## Fluxo do Processo
+Exemplo:  
+- Planilha com **100 linhas** →  
+  - **Manual:** ~100 minutos  
+  - **Automatizado:** ~2 minutos
 
-1. O sistema lê a planilha e inicia a consulta dos boletos via API Safe2Pay.
-2. Para cada boleto, o status e os dados de pagamento são retornados e processados.
-3. Caso o boleto esteja pendente, baixado, liberado ou pago, as colunas correspondentes da planilha são atualizadas.
-4. Ao final, é gerado um resumo com a quantidade de boletos processados, pagos, liberados, baixados e pendentes.
+---
+
+## ⚙️ Tecnologias Utilizadas
+- **Python 3.10**
+- **Pandas** (manipulação de planilhas)
+- **Requests** (integração com API Safe2Pay)
+- **Dotenv** (armazenamento seguro do token)
+
