@@ -2,8 +2,8 @@ import pandas as pd
 
 class Login:
     def __init__(self) -> None:
-        self._caminhoPlanilha = 'C:\\Users\\Pessoal\\Desktop\\Emissões Video Certsempre Junho.xlsx'
-        self._paginaPlanilha = 'Planilha1'
+        self._caminhoPlanilha = 'C:\\Users\\Pessoal\\Desktop\\Emissões Video Agosto.xlsx'
+        self._paginaPlanilha = 'Plan1'
         self.pago = 0
         self.liberado = 0
         self.baixado = 0

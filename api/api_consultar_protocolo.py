@@ -3,10 +3,10 @@ from datetime import datetime
 
 
 def consultar_protocolo(protocolo, token):
-    url = f"https://api.safe2pay.com.br/v2/transaction/Reference?reference={protocolo}"
+    url = f"https://api.safe2pay.com.br/v2/Transaction/List={protocolo}"
 
     headers = {
-        'X-API-KEY': token
+        'F577F1B3BFE24C99959BC877925D9ACB': token
     }
 
     response = requests.get(url, headers=headers)
