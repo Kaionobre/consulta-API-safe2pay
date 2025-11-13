@@ -6,7 +6,7 @@ def consultar_protocolo(protocolo, token):
     url = f"https://api.safe2pay.com.br/v2/transaction/Reference?reference={protocolo}"
 
     headers = {
-        'X-API-KEY': token
+        'x-api-key': token
     }
 
     response = requests.get(url, headers=headers)

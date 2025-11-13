@@ -2,7 +2,7 @@ import pandas as pd
 
 class Login:
     def __init__(self) -> None:
-        self._caminhoPlanilha = 'C:\\Users\\Pessoal\\Desktop\\Emissões Video Certsempre Junho.xlsx'
+        self._caminhoPlanilha = 'C:\\Users\\kaion\\OneDrive\\Área de Trabalho\\Emissões Video Setembro.xlsx'
         self._paginaPlanilha = 'Planilha1'
         self.pago = 0
         self.liberado = 0
