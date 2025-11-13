@@ -48,7 +48,7 @@ for linha in lerPlanilha.itertuples():
                 lerPlanilha.at[linha.Index, 'VALOR PAGO'] = str(consulta['valor_boleto'])     
         lerPlanilha.at[linha.Index, 'STATUS'] = consulta['status']
         lerPlanilha.at[linha.Index, 'DATA PAGAMENTO'] = consulta['data_pagamento']             
-    except:
+    except Exception as e:
         print('none')
 
 nome_arquivo = f"Planilha Finalizada {datetime.now().strftime('%d-%m-%Y__%H-%M-%S')}.xlsx"
